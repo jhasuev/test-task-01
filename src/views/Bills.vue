@@ -18,30 +18,18 @@
       class="mb-5"
     />
 
-    <template v-if="!selectedAcctNum">
-      <h6 class="text-center">Выберите счет...</h6>
-    </template>
-    
-    <template v-else-if="!getFilteredOpEntry.length">
-      <h6 class="text-center">Нет проводки по этому счету...</h6>
-    </template>
-
-    <template v-else>
-      <h2 class="mb-3">Проводки по счету</h2>
-      
-      <b-table
-        :fields="fieldsOpEntry"
-        :items="getFilteredOpEntry"
-      />
-    </template>
-
+    <entries :selected-acct-num="selectedAcctNum"/>
   </div>
 </template>
 
 <script>
+import Entries from "@/components/entries"
 import { mapGetters, mapActions } from "vuex"
 export default {
   name: "Bills",
+  components: {
+    Entries,
+  },
   data() {
     return {
       fieldsAcctPos: [
@@ -59,35 +47,13 @@ export default {
         },
       ],
 
-      fieldsOpEntry: [
-        {
-          key: 'OpDate',
-          label: 'Дата',
-        },
-        {
-          key: 'AcctNumDb',
-          label: 'Счет дебета',
-        },
-        {
-          key: 'AcctNumCr',
-          label: 'Счет кредита',
-        },
-        {
-          key: 'Amount',
-          label: 'Сумма проводки',
-        },
-      ],
-
       selectedOpDate: null,
-      selectedAcctNum: null,
+      selectedAcctNum: "",
     }
   },
 
   computed: {
-    ...mapGetters([
-      'getAcctPos',
-      'getOpEntry',
-    ]),
+    ...mapGetters([ 'getAcctPos' ]),
 
     getOpDateOptions() {
       return this.getAcctPos.reduce((acc, acct) => {
@@ -104,25 +70,16 @@ export default {
     getFilteredAcctPos() {
       return this.getAcctPos.filter(acct => acct.OpDate === this.selectedOpDate)
     },
-    
-    getFilteredOpEntry() {
-      return this.getOpEntry.filter(
-        item => item.AcctNumCr === this.selectedAcctNum || item.AcctNumDb === this.selectedAcctNum
-      )
-    },
   },
 
   async created() {
     await this.loadFile('acctPos')
-    await this.loadFile('opEntry')
     
     this.setDefaultOpDateSelected()
   },
 
   methods: {
-    ...mapActions([
-      'loadFile',
-    ]),
+    ...mapActions([ 'loadFile' ]),
 
     setDefaultOpDateSelected() {
       // выбираем последний элемент в селекторе
