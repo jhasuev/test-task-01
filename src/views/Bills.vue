@@ -10,7 +10,7 @@
     />
 
     <b-table
-      :fields="fieldsAcctPos"
+      :fields="fields"
       :items="getFilteredAcctPos"
       select-mode='single'
       selectable
@@ -18,7 +18,10 @@
       class="mb-5"
     />
 
-    <entries :selected-acct-num="selectedAcctNum"/>
+    <entries
+      :entry="selectedEntry"
+      :fields-for-filter="['AcctNumCr', 'AcctNumDb']"
+    />
   </div>
 </template>
 
@@ -32,7 +35,7 @@ export default {
   },
   data() {
     return {
-      fieldsAcctPos: [
+      fields: [
         {
           key: 'AcctNum',
           label: 'Номер счета',
@@ -48,7 +51,7 @@ export default {
       ],
 
       selectedOpDate: null,
-      selectedAcctNum: "",
+      selectedEntry: "",
     }
   },
 
@@ -87,7 +90,7 @@ export default {
     },
 
     onAccNumRowSelected(items) {
-      this.selectedAcctNum = items[0]?.AcctNum
+      this.selectedEntry = items[0]?.AcctNum
     },
   },
 

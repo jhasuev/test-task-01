@@ -8,11 +8,13 @@ const store = new Vuex.Store({
     return {
       acctPos: [],
       opEntry: [],
+      opDate: [],
     }
   },
   getters: {
     getAcctPos: state => state.acctPos,
     getOpEntry: state => state.opEntry,
+    getOpDate: state => state.opDate,
   },
   mutations: {
     setData(state, { fileName, data }) {

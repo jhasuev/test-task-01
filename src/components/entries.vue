@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="!selectedAcctNum">
+    <template v-if="!entry">
       <h6 class="text-center">Выберите счет...</h6>
     </template>
     
@@ -24,7 +24,8 @@ import { mapGetters, mapActions } from "vuex"
 export default {
   name: "Entries",
   props: {
-    selectedAcctNum: { type: String, default: "" },
+    entry: { type: String, default: "" },
+    fieldsForFilter: { type: Array, default: () => [] },
   },
   data() {
     return {
@@ -54,7 +55,7 @@ export default {
     
     getFilteredOpEntry() {
       return this.getOpEntry.filter(
-        item => item.AcctNumCr === this.selectedAcctNum || item.AcctNumDb === this.selectedAcctNum
+        item => this.fieldsForFilter.some(field => item[field] === this.entry)
       )
     },
   },
