@@ -14,25 +14,30 @@
       :items="getFilteredAcctPos"
       select-mode='single'
       selectable
-      @row-selected="onAccNumRowSelected"
+      @row-selected="onRowSelected($event, [ 'AcctNum' ])"
       class="mb-5"
     />
 
     <entries
-      :entry="selectedEntry"
+      header="Проводки по счету"
+      :entries="selectedEntry"
       :fields-for-filter="['AcctNumCr', 'AcctNumDb']"
+      :fields="entryFields"
+      :items="getOpEntry"
     />
   </div>
 </template>
 
 <script>
 import Entries from "@/components/entries"
+import MixinsLocals from "@/mixins/locals"
 import { mapGetters, mapActions } from "vuex"
 export default {
   name: "Bills",
   components: {
     Entries,
   },
+  mixins: [ MixinsLocals ],
   data() {
     return {
       fields: [
@@ -50,13 +55,31 @@ export default {
         },
       ],
 
+      entryFields: [
+        {
+          key: 'AcctNumDb',
+          label: 'Счет дебета',
+        },
+        {
+          key: 'AcctNumCr',
+          label: 'Счет кредита',
+        },
+        {
+          key: 'Amount',
+          label: 'Сумма проводки',
+        },
+        {
+          key: 'OpDate',
+          label: 'Дата',
+        },
+      ],
+
       selectedOpDate: null,
-      selectedEntry: "",
     }
   },
 
   computed: {
-    ...mapGetters([ 'getAcctPos' ]),
+    ...mapGetters([ 'getOpEntry', 'getAcctPos' ]),
 
     getOpDateOptions() {
       return this.getAcctPos.reduce((acc, acct) => {
@@ -77,6 +100,7 @@ export default {
 
   async created() {
     await this.loadFile('acctPos')
+    await this.loadFile('opEntry')
     
     this.setDefaultOpDateSelected()
   },
@@ -87,10 +111,6 @@ export default {
     setDefaultOpDateSelected() {
       // выбираем последний элемент в селекторе
       this.selectedOpDate = this.getAcctPos.slice(-1)[0].OpDate
-    },
-
-    onAccNumRowSelected(items) {
-      this.selectedEntry = items[0]?.AcctNum
     },
   },
 

@@ -7,25 +7,30 @@
       :items="getOpDate"
       select-mode='single'
       selectable
-      @row-selected="onAccNumRowSelected"
+      @row-selected="onRowSelected($event, [ 'OpDate' ])"
       class="mb-5"
     />
 
     <entries
-      :entry="selectedEntry"
+      header="Проводки операционного дня"
+      :entries="selectedEntry"
       :fields-for-filter="['OpDate']"
+      :fields="entryFields"
+      :items="getOpEntry"
     />
   </div>
 </template>
 
 <script>
 import Entries from "@/components/entries"
+import MixinsLocals from "@/mixins/locals"
 import { mapGetters, mapActions } from "vuex"
 export default {
   name: "OperationDates",
   components: {
     Entries,
   },
+  mixins: [ MixinsLocals ],
   data() {
     return {
       fields: [
@@ -35,24 +40,34 @@ export default {
         },
       ],
 
-      selectedEntry: "",
+      entryFields: [
+        {
+          key: 'AcctNumDb',
+          label: 'Счет дебета',
+        },
+        {
+          key: 'AcctNumCr',
+          label: 'Счет кредита',
+        },
+        {
+          key: 'Amount',
+          label: 'Сумма проводки',
+        },
+      ],
     }
   },
 
   computed: {
-    ...mapGetters([ 'getOpDate' ]),
+    ...mapGetters([ 'getOpEntry', 'getOpDate' ]),
   },
 
   async created() {
+    await this.loadFile('opEntry')
     await this.loadFile('opDate')
   },
 
   methods: {
     ...mapActions([ 'loadFile' ]),
-
-    onAccNumRowSelected(items) {
-      this.selectedEntry = items[0]?.OpDate
-    },
   },
 
 }
