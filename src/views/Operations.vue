@@ -13,8 +13,8 @@
 
     <entries
       header="Счета проводок"
-      :entries="selectedEntry"
-      :fields-for-filter="['AcctNum']"
+      :compare-items="selectedEntry"
+      :compare-fields="['AcctNum']"
       :fields="entryFields"
       :items="getFilteredEntryItems"
     />
@@ -35,6 +35,10 @@ export default {
     return {
       fields: [
         {
+          key: 'OpDate',
+          label: 'Дата',
+        },
+        {
           key: 'AcctNumDb',
           label: 'Счет дебета',
         },
@@ -44,11 +48,7 @@ export default {
         },
         {
           key: 'Amount',
-          label: 'Сумма проводки',
-        },
-        {
-          key: 'OpDate',
-          label: 'Дата',
+          label: 'Сумма',
         },
       ],
 
@@ -68,6 +68,7 @@ export default {
   computed: {
     ...mapGetters([ 'getOpEntry', 'getAcctPos' ]),
 
+    // получаем по одной записи по каждому счету (в нашем случае только 2 записи)
     getFilteredEntryItems() {
       return this.getAcctPos.reduce((acc, item) => {
         const itemInIndex = acc.findIndex(itemIn => itemIn.AcctNum === item.AcctNum)

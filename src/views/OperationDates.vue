@@ -13,8 +13,8 @@
 
     <entries
       header="Проводки операционного дня"
-      :entries="selectedEntry"
-      :fields-for-filter="['OpDate']"
+      :compare-items="selectedEntry"
+      :compare-fields="['OpDate']"
       :fields="entryFields"
       :items="getOpEntry"
     />
@@ -51,7 +51,7 @@ export default {
         },
         {
           key: 'Amount',
-          label: 'Сумма проводки',
+          label: 'Сумма',
         },
       ],
     }

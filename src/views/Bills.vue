@@ -20,8 +20,8 @@
 
     <entries
       header="Проводки по счету"
-      :entries="selectedEntry"
-      :fields-for-filter="['AcctNumCr', 'AcctNumDb']"
+      :compare-items="selectedEntry"
+      :compare-fields="['AcctNumCr', 'AcctNumDb']"
       :fields="entryFields"
       :items="getOpEntry"
     />
@@ -49,13 +49,13 @@ export default {
           key: 'Balance',
           label: 'Остаток',
         },
-        {
-          key: 'OpDate',
-          label: 'Дата',
-        },
       ],
 
       entryFields: [
+        {
+          key: 'OpDate',
+          label: 'Дата операционного дня',
+        },
         {
           key: 'AcctNumDb',
           label: 'Счет дебета',
@@ -66,11 +66,7 @@ export default {
         },
         {
           key: 'Amount',
-          label: 'Сумма проводки',
-        },
-        {
-          key: 'OpDate',
-          label: 'Дата',
+          label: 'Сумма',
         },
       ],
 

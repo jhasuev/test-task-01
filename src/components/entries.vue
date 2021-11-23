@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="!entries.length">
+    <template v-if="!compareItems.length">
       <h6 class="text-center">Выберите запись...</h6>
     </template>
     
@@ -26,15 +26,17 @@ export default {
     header: { type: String, default: "Таблица данных" },
     items: { type: Array, default: () => [] },
     fields: { type: Array, default: () => [] },
-    entries: { type: Array, default: () => [] },
-    fieldsForFilter: { type: Array, default: () => [] },
+    
+    // данные для сравнения 
+    compareItems: { type: Array, default: () => [] },
+    compareFields: { type: Array, default: () => [] },
   },
 
   computed: {
     getFilteredItems() {
       return this.items.filter(
-        item => this.fieldsForFilter.some(
-          field => this.entries.includes(item[field])
+        item => this.compareFields.some(
+          field => this.compareItems.includes(item[field])
         )
       )
     },
