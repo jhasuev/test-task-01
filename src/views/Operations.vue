@@ -21,21 +21,11 @@
           >
         </template>
         <template #cell(action)="data">
-          <div class="text-end">
-            <b-button
-              variant="danger"
-              size="sm"
-              class="mx-1"
-              @click="removeItem('opEntry', data.item.id)"
-            >Удалить</b-button>
-
-            <b-button
-              variant="primary"
-              size="sm"
-              class="mx-1"
-              @click="editItem('opEntry', data.item.id, ['OpDate','AcctNumDb','AcctNumCr','Amount' ])"
-            >Редактировать</b-button>
-          </div>
+          <action-buttons
+            store-name="opEntry"
+            :item-id="data.item.id"
+            :fields-for-edit="['OpDate','AcctNumDb','AcctNumCr','Amount']"
+          />
         </template>
       </b-table>
 
@@ -55,12 +45,14 @@
 
 <script>
 import Entries from "@/components/entries"
+import ActionButtons from "@/components/action-buttons"
 import MixinsLocals from "@/mixins/locals"
 import { mapGetters, mapActions } from "vuex"
 export default {
   name: "Operations",
   components: {
     Entries,
+    ActionButtons,
   },
   mixins: [ MixinsLocals ],
   data() {
