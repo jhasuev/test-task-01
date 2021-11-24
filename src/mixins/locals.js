@@ -14,5 +14,13 @@ export default {
         }
       }
     },
+
+    removeItem(storeName, id) {
+      this.$root.$emit('removeItem', storeName, id)
+    },
+
+    editItem(storeName, id, fieldsForEdit) {
+      this.$root.$emit('editItem', storeName, id, fieldsForEdit)
+    },
   },
 }
