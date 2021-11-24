@@ -1,63 +1,62 @@
 <template>
   <div>
-    <h2 class="mb-3" >
-      <template v-if="getFilteredAcctPos.length">Счета с остатками на дату</template>
-      <template v-else>Нет данных</template>
-    </h2>
+    <template v-if="getFilteredAcctPos.length">
+      <h2 class="mb-3">Счета с остатками на дату</h2>
 
-    <b-form-select
-      v-if="getOpDateOptions.length"
-      v-model="selectedOpDate"
-      :options="getOpDateOptions"
-      size="sm"
-      class="mt-3"
-    />
+      <b-form-select
+        v-model="selectedOpDate"
+        :options="getOpDateOptions"
+        size="sm"
+      />
 
-    <b-table
-      v-if="getFilteredAcctPos.length"
-      :fields="fields"
-      :items="getFilteredAcctPos"
-      select-mode='single'
-      selectable
-      @row-selected="onRowSelected($event, [ 'AcctNum' ])"
-      class="mb-5 mt-3"
-    >
-      <template #table-colgroup="scope">
-        <col
-          v-for="field in scope.fields"
-          :key="field.key"
-          :style="{ 
-            width: field.key === 'action' ? '230px' : '',
-          }"
-        >
-      </template>
-      <template #cell(action)="data">
-        <div class="text-end">
-          <b-button
-            variant="danger"
-            size="sm"
-            class="mx-1"
-            @click="removeItem('acctPos', data.item.id)"
-          >Удалить</b-button>
+      <b-table
+        :fields="fields"
+        :items="getFilteredAcctPos"
+        select-mode='single'
+        selectable
+        @row-selected="onRowSelected($event, [ 'AcctNum' ])"
+        class="mb-5 mt-3"
+      >
+        <template #table-colgroup="scope">
+          <col
+            v-for="field in scope.fields"
+            :key="field.key"
+            :style="{ 
+              width: field.key === 'action' ? '230px' : '',
+            }"
+          >
+        </template>
+        <template #cell(action)="data">
+          <div class="text-end">
+            <b-button
+              variant="danger"
+              size="sm"
+              class="mx-1"
+              @click="removeItem('acctPos', data.item.id)"
+            >Удалить</b-button>
 
-          <b-button
-            variant="primary"
-            size="sm"
-            class="mx-1"
-            @click="editItem('acctPos', data.item.id, ['AcctNum', 'Balance'])"
-          >Редактировать</b-button>
-        </div>
-      </template>
-    </b-table>
+            <b-button
+              variant="primary"
+              size="sm"
+              class="mx-1"
+              @click="editItem('acctPos', data.item.id, ['AcctNum', 'Balance'])"
+            >Редактировать</b-button>
+          </div>
+        </template>
+      </b-table>
 
-    <entries
-      v-if="getFilteredAcctPos.length"
-      header="Проводки по счету"
-      :compare-items="selectedEntry"
-      :compare-fields="['AcctNumCr', 'AcctNumDb']"
-      :fields="entryFields"
-      :items="getOpEntry"
-    />
+      <entries
+        header="Проводки по счету"
+        :compare-items="selectedEntry"
+        :compare-fields="['AcctNumCr', 'AcctNumDb']"
+        :fields="entryFields"
+        :items="getOpEntry"
+      />
+    </template>
+
+    <template v-else>
+      <h2 class="mb-3">Нет данных</h2>
+    </template>
   </div>
 </template>
 
