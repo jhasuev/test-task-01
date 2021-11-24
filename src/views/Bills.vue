@@ -58,24 +58,17 @@
       :fields="entryFields"
       :items="getOpEntry"
     />
-    
-    <remove-item />
-    <edit-item />
   </div>
 </template>
 
 <script>
 import Entries from "@/components/entries"
 import MixinsLocals from "@/mixins/locals"
-import RemoveItem from "@/components/remove-item"
-import EditItem from "@/components/edit-item"
 import { mapGetters, mapActions } from "vuex"
 export default {
   name: "Bills",
   components: {
     Entries,
-    RemoveItem,
-    EditItem,
   },
   mixins: [ MixinsLocals ],
   data() {

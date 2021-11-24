@@ -26,7 +26,7 @@
       <b-button size="sm" @click="cancel()">
         Вернуться
       </b-button>
-      <b-button size="sm" variant="danger" @click="edit()">
+      <b-button size="sm" variant="primary" @click="edit()">
         Изменить
       </b-button>
     </template>

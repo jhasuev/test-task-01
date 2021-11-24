@@ -1,17 +1,49 @@
 <template>
   <div>
-    <h2 class="mb-3">Проводки</h2>
+    <h2 class="mb-3" >
+      <template v-if="getOpEntry.length">Проводки</template>
+      <template v-else>Нет данных</template>
+    </h2>
 
     <b-table
+      v-if="getOpEntry.length"
       :fields="fields"
       :items="getOpEntry"
       select-mode='single'
       selectable
       @row-selected="onRowSelected($event, [ 'AcctNumCr', 'AcctNumDb' ])"
       class="mb-5"
-    />
+    >
+      <template #table-colgroup="scope">
+        <col
+          v-for="field in scope.fields"
+          :key="field.key"
+          :style="{ 
+            width: field.key === 'action' ? '230px' : '',
+          }"
+        >
+      </template>
+      <template #cell(action)="data">
+        <div class="text-end">
+          <b-button
+            variant="danger"
+            size="sm"
+            class="mx-1"
+            @click="removeItem('opEntry', data.item.id)"
+          >Удалить</b-button>
+
+          <b-button
+            variant="primary"
+            size="sm"
+            class="mx-1"
+            @click="editItem('opEntry', data.item.id, ['OpDate','AcctNumDb','AcctNumCr','Amount' ])"
+          >Редактировать</b-button>
+        </div>
+      </template>
+    </b-table>
 
     <entries
+      v-if="getOpEntry.length"
       header="Счета проводок"
       :compare-items="selectedEntry"
       :compare-fields="['AcctNum']"
@@ -49,6 +81,10 @@ export default {
         {
           key: 'Amount',
           label: 'Сумма',
+        },
+        {
+          key: 'action',
+          label: 'Действие',
         },
       ],
 
