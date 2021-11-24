@@ -26,7 +26,7 @@
       <b-button size="sm" @click="cancel()">
         Вернуться
       </b-button>
-      <b-button size="sm" variant="primary" @click="edit()">
+      <b-button size="sm" variant="primary" @click="edit()" :disabled="!canSave">
         Изменить
       </b-button>
     </template>
@@ -52,6 +52,10 @@ export default {
   },
   computed: {
     ...mapGetters(['getStoreItemByParams']),
+    
+    canSave() {
+      return !this.items.some(item => !this.checkValid(item.key, item.value))
+    },
   },
   mounted() {
     this.$root.$on('editItem', this.open)
@@ -69,6 +73,10 @@ export default {
     },
 
     edit() {
+      if (!this.canSave) {
+        return
+      }
+
       const items = this.items.reduce((acc, item) => {
         let val = item.value
         if (FIELDS_DESC[item.key].type) {
