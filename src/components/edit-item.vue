@@ -17,7 +17,7 @@
           :state="checkValid(item.key, item.value)"
         />
         <b-form-invalid-feedback :id="`${i}-feedback`">
-          {{ FIELDS_DESC[item.key].invalidText }}
+          <div v-html="FIELDS_DESC[item.key].invalidText" />
         </b-form-invalid-feedback>
       </div>
     </template>

@@ -5,7 +5,15 @@
     </template>
 
     <template #default>
-      <p>Вы действительно хотите удалить запись?</p>
+      <p>Вы действительно хотите удалить эту запись?</p>
+      <div
+        v-for="(item, i) in getItems"
+        :key="i"
+      >
+        <hr v-if="i != 0" class="my-2">
+        <b>{{ item.label }}</b>:
+        <div>{{ item.value }}</div>
+      </div>
     </template>
 
     <template #modal-footer="{ cancel }">
@@ -20,14 +28,35 @@
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
+import helpers from "@/helpers"
+const { FIELDS_DESC } = helpers
+
 export default {
   name: 'RemoveItem',
   data() {
     return {
       storeName: '',
       id: null,
+      FIELDS_DESC,
     }
+  },
+  computed: {
+    ...mapGetters(['getStoreItemByParams']),
+
+    getItems() {
+      const item = { ...this.getStoreItemByParams(this.storeName, this.id) }
+      const fields = []
+      for(let key in item) {
+        fields.push({
+          key,
+          value: item[key],
+          label: FIELDS_DESC[key]?.label,
+        })
+      }
+
+      return fields.filter(field => field.key != 'id')
+    },
   },
   created() {
     this.$root.$on('removeItem', this.open)

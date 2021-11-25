@@ -1,8 +1,11 @@
 const FIELDS_DESC = {
+  id: {
+    label: "ID",
+  },
   AcctNum: {
     label: "Номер счета",
     regExp: /^[0-9]{20}$/,
-    invalidText: "Номер счета должно содержать ровно 20 цифр",
+    invalidText: "Номер счета должен содержать ровно 20 цифр",
   },
   Balance: {
     label: "Остаток",
@@ -13,7 +16,7 @@ const FIELDS_DESC = {
   OpDate: {
     label: "Дата",
     regExp: /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/,
-    invalidText: "Дата должна содержать только числа в формате ггг-мм-дд (напр. 2017-07-27)",
+    invalidText: "Дата должна содержать только числа в формате <br/> ггг-мм-дд (напр. 2017-07-27)",
   },
   Amount: {
     label: "Сумма",
@@ -22,8 +25,8 @@ const FIELDS_DESC = {
     type: Number,
   },
 }
-FIELDS_DESC.AcctNumDb = FIELDS_DESC.AcctNum
-FIELDS_DESC.AcctNumCr = FIELDS_DESC.AcctNum
+FIELDS_DESC.AcctNumDb = { ...FIELDS_DESC.AcctNum, label: "Cчет дебета" }
+FIELDS_DESC.AcctNumCr = { ...FIELDS_DESC.AcctNum, label: "Cчет кредита" }
 
 const STORE_COLUMNS = {
   acctPos: ["AcctNum", "Balance", "OpDate"],
