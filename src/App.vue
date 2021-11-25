@@ -11,6 +11,7 @@
     
     <remove-item />
     <edit-item />
+    <add-item />
   </div>
 </template>
 
@@ -18,12 +19,14 @@
 import Navbar from "@/components/navbar"
 import RemoveItem from "@/components/remove-item"
 import EditItem from "@/components/edit-item"
+import AddItem from "@/components/add-item"
 export default {
   name: 'App',
   components: {
     Navbar,
     RemoveItem,
     EditItem,
+    AddItem,
   },
 }
 </script>

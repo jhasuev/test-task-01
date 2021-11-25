@@ -25,6 +25,13 @@ const FIELDS_DESC = {
 FIELDS_DESC.AcctNumDb = FIELDS_DESC.AcctNum
 FIELDS_DESC.AcctNumCr = FIELDS_DESC.AcctNum
 
+const STORE_COLUMNS = {
+  acctPos: ["AcctNum", "Balance", "OpDate"],
+  opDate: ["OpDate"],
+  opEntry: ["AcctNumCr", "AcctNumDb", "Amount", "OpDate"],
+}
+
 export default {
   FIELDS_DESC,
+  STORE_COLUMNS,
 }

@@ -3,13 +3,21 @@
     <template v-if="getOpDate.length">
       <h2 class="mb-3">Операционные дни</h2>
 
+      <div class="d-flex">
+        <b-button
+          class="ml-auto"
+          variant="primary"
+          @click="addItem('opDate')"
+        >Добавить запись</b-button>
+      </div>
+
       <b-table
         :fields="fields"
         :items="getOpDate"
         select-mode='single'
         selectable
         @row-selected="onRowSelected($event, [ 'OpDate' ])"
-        class="mb-5"
+        class="mb-5 mt-3"
       >
         <template #table-colgroup="scope">
           <col

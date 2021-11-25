@@ -1,3 +1,6 @@
+import helpers from "@/helpers"
+const { FIELDS_DESC } = helpers
+
 export default {
   data() {
     return {
@@ -21,6 +24,14 @@ export default {
 
     editItem(storeName, id, fieldsForEdit) {
       this.$root.$emit('editItem', storeName, id, fieldsForEdit)
+    },
+
+    addItem(storeName) {
+      this.$root.$emit('addItem', storeName)
+    },
+
+    checkValid(key, value) {
+      return FIELDS_DESC[key].regExp.test(value)
     },
   },
 }

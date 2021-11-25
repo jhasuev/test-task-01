@@ -3,11 +3,19 @@
     <template v-if="getFilteredAcctPos.length">
       <h2 class="mb-3">Счета с остатками на дату</h2>
 
-      <b-form-select
-        v-model="selectedOpDate"
-        :options="getOpDateOptions"
-        size="sm"
-      />
+      <div class="d-flex">
+        <b-form-select
+          v-model="selectedOpDate"
+          :options="getOpDateOptions"
+          size="sm"
+        />
+
+        <b-button
+          class="ml-auto"
+          variant="primary"
+          @click="addItem('acctPos')"
+        >Добавить запись</b-button>
+      </div>
 
       <b-table
         :fields="fields"

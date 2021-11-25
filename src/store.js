@@ -32,6 +32,10 @@ const store = new Vuex.Store({
         editingItem[key] = items[key]
       }
     },
+
+    ADD_ITEM(state, { storeName, items }) {
+      state[storeName].push(items)
+    },
   },
   actions: {
     async loadFile({ commit, state }, fileName) {
@@ -48,6 +52,10 @@ const store = new Vuex.Store({
 
     editItem({ commit }, payload) {
       commit('EDIT_ITEM', payload)
+    },
+
+    addItem({ commit }, payload) {
+      commit('ADD_ITEM', payload)
     },
   },
 })

@@ -3,13 +3,21 @@
     <template v-if="getOpEntry.length">
       <h2 class="mb-3" >Проводки</h2>
 
+      <div class="d-flex">
+        <b-button
+          class="ml-auto"
+          variant="primary"
+          @click="addItem('opEntry')"
+        >Добавить запись</b-button>
+      </div>
+
       <b-table
         :fields="fields"
         :items="getOpEntry"
         select-mode='single'
         selectable
         @row-selected="onRowSelected($event, [ 'AcctNumCr', 'AcctNumDb' ])"
-        class="mb-5"
+        class="mb-5 mt-3"
       >
         <template #table-colgroup="scope">
           <col
