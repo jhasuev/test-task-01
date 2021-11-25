@@ -1,7 +1,7 @@
 <template>
   <b-modal ref="modal" body-bg-variant="light">
     <template #modal-header>
-      <h5>Добавление записи</h5>
+      <h5 class="text-center flex-grow-1">Редактирование</h5>
     </template>
 
     <template #default>
@@ -14,11 +14,10 @@
         <b-form-input
           :id="`${i}`"
           v-model="item.value"
-          @input="item.typed = true"
-          :state="!item.typed || checkValid(item.key, item.value)"
+          :state="checkValid(item.key, item.value)"
         />
-        <b-form-invalid-feedback v-if="item.typed" :id="`${i}-feedback`">
-          {{ FIELDS_DESC[item.key].invalidText }}
+        <b-form-invalid-feedback :id="`${i}-feedback`">
+          <div v-html="FIELDS_DESC[item.key].invalidText" />
         </b-form-invalid-feedback>
       </div>
     </template>
@@ -27,19 +26,19 @@
       <b-button size="sm" @click="cancel()">
         Вернуться
       </b-button>
-      <b-button size="sm" variant="primary" @click="add()" :disabled="!canAdd">
-        Добавить
+      <b-button size="sm" variant="primary" @click="edit()" :disabled="!canSave">
+        Изменить
       </b-button>
     </template>
   </b-modal>
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 import helpers from "@/helpers"
 import MixinsLocals from "@/mixins/locals"
 
-const { FIELDS_DESC, STORE_COLUMNS } = helpers
+const { FIELDS_DESC } = helpers
 
 export default {
   name: 'EditItem',
@@ -47,33 +46,36 @@ export default {
   data() {
     return {
       storeName: '',
-      fieldsForAdd: [],
+      id: null,
+      fieldsForEdit: [],
       items: [],
       FIELDS_DESC,
-      STORE_COLUMNS,
     }
   },
   computed: {
-    canAdd() {
+    ...mapGetters(['getStoreItemByParams']),
+    
+    canSave() {
       return !this.items.some(item => !this.checkValid(item.key, item.value))
     },
   },
   mounted() {
-    this.$root.$on('addItem', this.open)
+    this.$root.$on('editItem', this.open)
   },
   methods: {
-    ...mapActions([ 'addItem' ]),
+    ...mapActions([ 'editItem' ]),
 
-    open(storeName) {
+    open(storeName, id, fieldsForEdit) {
       this.storeName = storeName
-      this.fieldsForAdd = STORE_COLUMNS[storeName]
+      this.id = id
+      this.fieldsForEdit = fieldsForEdit
+      this.createFieldsForEdit()
 
-      this.createFieldsForAdd()
       this.$refs.modal.show()
     },
 
-    add() {
-      if (!this.canAdd) {
+    edit() {
+      if (!this.canSave) {
         return
       }
 
@@ -86,20 +88,20 @@ export default {
         return acc
       }, {})
 
-      this.addItem({
+      this.editItem({
         items,
         storeName: this.storeName,
+        id: this.id,
       })
       this.$refs.modal.hide()
     },
 
-    createFieldsForAdd() {
-      this.items = this.fieldsForAdd.reduce((acc, key) => {
-        acc.push({
-          key,
-          value: "",
-          typed: false,
-        })
+    createFieldsForEdit() {
+      const fields = { ...this.getStoreItemByParams(this.storeName, this.id) }
+      this.items = Object.keys(fields).reduce((acc, key) => {
+        if (this.fieldsForEdit.includes(key)) {
+          acc.push({ key, value: fields[key] })
+        }
 
         return acc
       }, [])

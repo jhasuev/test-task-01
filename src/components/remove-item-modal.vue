@@ -1,11 +1,11 @@
 <template>
   <b-modal ref="modal">
     <template #modal-header>
-      <h5>Подтвердите действие</h5>
+      <h5 class="text-center flex-grow-1">Подтвердите действие</h5>
     </template>
 
     <template #default>
-      <p>Вы действительно хотите удалить эту запись?</p>
+      <p class="text-center">Вы действительно хотите удалить эту запись?</p>
       <div
         v-for="(item, i) in getItems"
         :key="i"
